@@ -66,6 +66,13 @@ router.get(
   verifyCompany,
   companiesController.getCompanyApplications
 );
+router.get(
+  "/company/applications/:id",
+  verifyToken,
+  verifyCompany,
+  companiesController.getCompanyApplicationsByID
+);
+
 
 router.put(
   "/company/applications/:id",
@@ -128,4 +135,5 @@ router.post(
 );
 
 module.exports = router;
+
  
