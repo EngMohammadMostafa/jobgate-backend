@@ -418,3 +418,57 @@ exports.getCompanyApplications = async (req, res) => {
     });
   }
 };
+
+exports.getCompanyApplicationsByID = async (req, res) => {
+  try {
+    const company_id = req.company.company_id;
+    const application_id = req.params.id;
+
+    const application = await Application.findOne({
+      include: [
+        {
+          model: User,
+          attributes: [
+            "user_id",
+            "full_name",
+            "email",
+            "phone",
+            "profile_completed",
+          ],
+        },
+        {
+          model: JobPosting,
+          where: { company_id: company_id },
+          attributes: [
+            "job_id",
+            "title",
+            "location",
+            "description",
+            "requirements",
+            "salary_min",
+            "salary_max",
+            "form_type",
+            "external_form_url",
+          ],
+        },
+        {
+          model: CV,
+          attributes: ["cv_id", "file_url", "title"],
+        },
+      ],
+      where: { application_id: application_id },
+    });
+
+    if (!application) {
+      return res.status(404).json({ message: "طلب التوظيف غير موجود" });
+    }
+
+    return successResponse(res, application, "تم جلب بيانات الطلب بنجاح.");
+  } catch (error) {
+    console.error("Error fetching company application by ID:", error);
+    return res.status(500).json({
+      message: "فشل في جلب بيانات الطلب.",
+      error: error.message,
+    });
+  }
+};
