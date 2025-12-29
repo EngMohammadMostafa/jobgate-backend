@@ -266,11 +266,43 @@ const requestConsultation = async (req, res) => {
     return res.status(500).json({ message: "فشل في إرسال طلب الاستشارة." });
   }
 };
+const getAllConsultants = async (req, res) => {
+  try {
+    const consultants = await Consultant.findAll({
+      include: [
+        {
+          model: User,
+          // عرض بيانات التواصل (الإيميل والهاتف) للجميع (حسب طلبك)
+          attributes: ["user_id", "full_name", "phone", "email"],
+        },
+      ],
+      attributes: [
+        "consultant_id",
+        "bio",
+        "expertise_fields",
+        "work_history_url",
+        "hourly_rate",
+        "clients_served",
+      ],
+    });
 
+    if (!consultants || consultants.length === 0) {
+      return res.status(404).json({ message: "لا يوجد مستشارون مفعّلون." });
+    }
+
+    // يجب أن يكون المستشار مُفعلاً (أي لديه سجل في جدول Consultants)
+    return successResponse(res, consultants);
+  } catch (error) {
+    console.error("Error getting consultant profile:", error);
+    return res.status(500).json({ message: "فشل في جلب تفاصيل المستشار." });
+  }
+};
 module.exports = {
   sendPushNotification,
   requestConsultation,
   getConsultantProfile,
   handleConsultantUpgrade,
   requestConsultantUpgrade,
+  getAllConsultants
 };
+
