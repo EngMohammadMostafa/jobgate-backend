@@ -179,7 +179,7 @@ exports.listJobPostings = async (req, res) => {
         "job_id",
         "title",
         "location",
-        "salary", // من النموذج الأول
+       
         "salary_min", // من النموذج الثاني
         "salary_max", // من النموذج الثاني
         "form_type",
@@ -385,3 +385,4 @@ exports.listUserApplications = async (req, res) => {
       .json({ message: "فشل في جلب طلبات التوظيف.", error: error.message });
   }
 };
+
