@@ -37,6 +37,8 @@ router.post(
 
 // 1. عرض بروفايل المستشار (للمستخدم العادي والشركة والإداري)
 router.get("/:user_id", consultantController.getConsultantProfile);
+router.get("/consultants", consultantController.getAllConsultants);
+
 
 // 2. زر طلب استشارة (للمستخدم العادي والشركة)
 router.post(
@@ -46,3 +48,4 @@ router.post(
 );
 
 module.exports = router;
+
