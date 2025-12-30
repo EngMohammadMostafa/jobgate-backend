@@ -113,7 +113,7 @@ app.use((err, req, res, next) => {
 // Database Sync
 // =====================
 sequelize
-  .sync({ alter: true })
+  .authenticate()
   .then(() => {
     console.log("✅ Database synced successfully");
 
